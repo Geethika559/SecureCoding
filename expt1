@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class EDProblem
+{
+	public static String encrypt(String message,int shift)
+	{
+		StringBuilder cipher=new StringBuilder();
+		for(int i=0;i<message.length();i++)
+		{
+			char ch=message.charAt(i);
+			if(Character.isLetter(ch))
+			{
+				char base=Character.isUpperCase(ch)?'A':'a';
+				ch=(char)(((int)ch-base+shift)%26+base);
+			}
+			cipher.append(ch);
+		}
+		return cipher.toString();		
+	}
+
+	public static String decrypt(String msg,int shift)
+	{
+		return encrypt(msg,26-shift);
+	}
+	
+	public static void analysis(String original,String cipher)
+	{
+		int shift=0;
+		System.out.println("Cipher text"+cipher);
+		System.out.println("Cryptanalysis");
+		for(int i=0;i<=26;i++)
+		{
+			String decryptedText=decrypt(cipher,i);
+			System.out.println("Key"+i+decryptedText);
+			if(decryptedText.equalsIgnoreCase(original))
+			{
+				shift=i;
+			}
+		}
+		System.out.println("Match found at key"+shift);	
+	}
+	public static void main(String args[])
+	{
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Enter the message");
+		String msg=sc.nextLine();
+		System.out.println("Enter the shift key");
+		int shift=sc.nextInt();
+		System.out.println("Encryped text:"+encrypt(msg,shift));
+		String cipher=encrypt(msg,shift);
+		System.out.println("decrypted text:"+decrypt(cipher,shift));
+		analysis(msg,cipher);
+	}
+}
